@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  strapi:
+    build: .
+    container_name: strapi-app
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "1337:1337"
+    depends_on:
+      - database
+    volumes:
+      - ./public/uploads:/app/public/uploads
+
+  database:
+    image: postgres:14
+    container_name: postgres-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: strapi_password
+      POSTGRES_DB: strapi
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
